@@ -964,10 +964,12 @@ class InstagramAPI:
                     response = self.s.post(self.API_URL + endpoint, data=post, verify=verify)
                 else:
                     response = self.s.get(self.API_URL + endpoint, verify=verify)
+                if response.status_code == 469: # Instagram throtling
+                    raise Exception("Response status is " + response.status_code)
                 break
             except Exception as e:
-                print('Except on SendRequest (wait 60 sec and resend): ' + str(e))
-                time.sleep(60)
+                print('Except on SendRequest (wait 120 sec and resend): ' + str(e))
+                time.sleep(120)
 
         if response.status_code == 200:
             self.LastResponse = response
